@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VoltPulse | Next-Gen EV Infrastructure & Reservations</title>
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div id="toast-container"></div>
+
+  <!-- Main Navigation Bar -->
+  <nav class="navbar">
+    <div class="logo" style="cursor: pointer;" onclick="switchTab('home-tab')">
+      <span class="logo-icon">⚡</span> VoltPulse <span class="badge">PRO</span>
+    </div>
+    <div class="nav-links">
+      <button class="nav-btn active" data-tab="home-tab">Home</button>
+      <button class="nav-btn" data-tab="stations-tab">Find Chargers</button>
+      <button class="nav-btn" data-tab="bookings-tab">My Bookings (<span id="booking-count">0</span>)</button>
+      <button class="nav-btn" data-tab="profile-tab">Profile</button>
+      <button class="nav-btn login-nav-btn" data-tab="login-tab">Login</button>
+    </div>
+  </nav>
+
+  <!-- Page Content Container -->
+  <main class="container">
+    
+    <!-- HOME TAB -->
+    <section id="home-tab" class="tab-content active">
+      <div class="hero-banner">
+        <span class="hero-chip">🚀 India's Fastest Charging Network</span>
+        <h1>Powering the Future of Green Mobility</h1>
+        <p>Access high-speed DC fast chargers across major national highways & metropolitan hubs. Reserve your plug-in slot in advance with zero wait time.</p>
+        <div class="hero-actions">
+          <button class="btn-primary" onclick="switchTab('stations-tab')">Locate Chargers Near Me</button>
+          <button class="btn-secondary" onclick="switchTab('profile-tab')">View EV Wallet</button>
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <h2>500+</h2>
+          <p>Active Stations</p>
+        </div>
+        <div class="stat-card">
+          <h2>150 kW</h2>
+          <p>Peak Ultra-Fast Speed</p>
+        </div>
+        <div class="stat-card">
+          <h2>99.8%</h2>
+          <p>Network Uptime</p>
+        </div>
+        <div class="stat-card">
+          <h2>100k+</h2>
+          <p>Monthly Charges</p>
+        </div>
+      </div>
+
+      <div class="features-section">
+        <h2>Why Choose VoltPulse?</h2>
+        <div class="features-grid">
+          <div class="feature-card">
+            <span class="feature-icon">🔌</span>
+            <h3>Universal Compatibility</h3>
+            <p>Support for CCS2 Fast DC, Type 2 AC, and Bharat AC/DC specs across all Indian EV models.</p>
+          </div>
+          <div class="feature-card">
+            <span class="feature-icon">📲</span>
+            <h3>Instant UPI Checkout</h3>
+            <p>Pay smoothly using Google Pay, PhonePe, or Paytm via dynamic on-screen QR codes.</p>
+          </div>
+          <div class="feature-card">
+            <span class="feature-icon">🛡️</span>
+            <h3>Guaranteed Availability</h3>
+            <p>Pre-book charging slots to prevent long waiting times at crowded highway stations.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STATIONS TAB -->
+    <section id="stations-tab" class="tab-content">
+      <div class="section-header">
+        <h2>EV Charging Station Network</h2>
+        <p>Search, filter, and reserve available charging points in real-time.</p>
+      </div>
+
+      <div class="search-bar-container">
+        <input type="text" id="search-input" placeholder="Search by city or station name (e.g. Bengaluru, Connaught Place, Ather)...">
+        <select id="filter-type">
+          <option value="All">All Connector Types</option>
+          <option value="CCS2">CCS2 DC Fast</option>
+          <option value="Type 2">Type 2 AC</option>
+        </select>
+      </div>
+
+      <div id="stations-grid" class="grid"></div>
+    </section>
+
+    <!-- BOOKINGS TAB -->
+    <section id="bookings-tab" class="tab-content">
+      <div class="section-header">
+        <h2>Your Active Charging Slots</h2>
+        <p>Review or cancel your upcoming reservations.</p>
+      </div>
+      <div id="bookings-list" class="bookings-grid"></div>
+    </section>
+
+    <!-- PROFILE TAB -->
+    <!-- PROFILE TAB -->
+    <section id="profile-tab" class="tab-content">
+      <div class="profile-card">
+        <div class="profile-header">
+          <div class="avatar" id="profile-avatar">AR</div>
+          <div>
+            <h3 id="profile-name">Ananya Roy</h3>
+            <p class="text-muted" id="profile-email-phone">ananya.roy@example.com • +91 98765 43210</p>
+          </div>
+        </div>
+        <div class="profile-details">
+          <div class="detail-box">
+            <label>Registered EV</label>
+            <p>Tata Nexon EV Max (KA 05 MB 9988)</p>
+          </div>
+          <div class="detail-box">
+            <label>Membership Tier</label>
+            <p>VoltPulse Platinum Fleet</p>
+          </div>
+          <div class="detail-box">
+            <label>Wallet Balance</label>
+            <p>₹1,250.00</p>
+          </div>
+        </div>
+        
+        <!-- NEW LOGOUT BUTTON -->
+        <button class="btn-secondary" style="width: 100%; margin-top: 20px; color: var(--danger); border-color: rgba(239, 68, 68, 0.4);" onclick="handleLogout()">Log Out Securely</button>
+
+      </div>
+    </section>
+
+    <!-- LOGIN TAB -->
+    <section id="login-tab" class="tab-content">
+      <div class="auth-card">
+        <h2>Welcome Back</h2>
+        <p class="text-muted">Sign in to manage your charging bookings</p>
+      <form id="login-form" onsubmit="handleLogin(event)">
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" id="login-name-input" required placeholder="Enter your full name">
+          </div>
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" id="login-email-input" required placeholder="name@domain.com">
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" required placeholder="••••••••">
+          </div>
+          <button type="submit" class="submit-btn">Login to Account</button>
+        </form>  
+      </div>
+    </section>
+
+  </main>
+
+  <!-- BOOKING & QR PAYMENT MODAL -->
+  <div id="booking-modal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal">&times;</span>
+      
+      <!-- Step 1: Form -->
+      <div id="modal-step-form">
+        <h3 id="modal-station-title">Reserve Slot</h3>
+        <p id="modal-station-sub" class="sub-text"></p>
+        
+        <form id="booking-form">
+          <input type="hidden" id="modal-station-id">
+          
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" id="user-name" required value="Ananya Roy">
+          </div>
+
+          <div class="form-group">
+            <label>Contact Phone</label>
+            <input type="tel" id="user-contact" required value="+91 98765 43210">
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Vehicle Model</label>
+              <input type="text" id="vehicle-model" required value="Tata Nexon EV Max">
+            </div>
+            <div class="form-group">
+              <label>Vehicle Number</label>
+              <input type="text" id="vehicle-number" required value="KA 05 MB 9988">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Date</label>
+              <input type="date" id="booking-date" required>
+            </div>
+            <div class="form-group">
+              <label>Time Slot</label>
+              <select id="booking-time" required>
+                <option value="09:00 - 10:00">09:00 AM - 10:00 AM</option>
+                <option value="11:00 - 12:00">11:00 AM - 12:00 PM</option>
+                <option value="14:00 - 15:00">02:00 PM - 03:00 PM</option>
+                <option value="17:00 - 18:00">05:00 PM - 06:00 PM</option>
+                <option value="20:00 - 21:00">08:00 PM - 09:00 PM</option>
+              </select>
+            </div>
+          </div>
+
+          <button type="button" class="submit-btn" onclick="proceedToPayment()">Proceed to Payment (₹200)</button>
+        </form>
+      </div>
+
+      <!-- Step 2: QR Payment -->
+      <div id="modal-step-qr" style="display: none; text-align: center;">
+        <h3>Complete Payment via UPI</h3>
+        <p class="sub-text">Scan with Google Pay, Paytm, or PhonePe</p>
+        
+        <div class="qr-box">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=upi://pay?pa=voltpulse@upi%26pn=VoltPulse%26am=200.00" alt="UPI QR Code">
+        </div>
+
+        <div class="payment-timer">Amount Payable: <strong>₹200.00</strong></div>
+        
+        <button type="button" class="submit-btn" onclick="confirmPayment()">Simulate Successful Scan & Pay</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Corporate Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-col brand-col">
+        <div class="logo"><span class="logo-icon">⚡</span> VoltPulse</div>
+        <p>Building India's most dependable, ultra-fast charging infrastructure for electric mobility.</p>
+        <div class="status-indicator">
+          <span class="dot green"></span> Network Operational (10/10 Hubs Active)
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="#" onclick="switchTab('home-tab'); return false;">Home</a></li>
+          <li><a href="#" onclick="switchTab('stations-tab'); return false;">Find Stations</a></li>
+          <li><a href="#" onclick="switchTab('bookings-tab'); return false;">My Reservations</a></li>
+          <li><a href="#" onclick="switchTab('profile-tab'); return false;">Profile & Wallet</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Support & Help</h4>
+        <ul>
+          <li><a href="#">Charging Guide</a></li>
+          <li><a href="#">Tariff Plans</a></li>
+          <li><a href="#">FAQs</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Contact Us</h4>
+        <p>📍 VoltPulse Towers, MG Road, Bengaluru</p>
+        <p>📞 24/7 Helpline: 1800-VOLT-EV</p>
+        <p>✉️ support@voltpulse.in</p>
+      </div>
+    </div>
+    
+    <div class="footer-bottom">
+      <p>© 2026 VoltPulse Technologies Pvt Ltd. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
